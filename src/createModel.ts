@@ -4,6 +4,7 @@ import path from "path"
 import { extractJSONCode } from "./extractCode"
 import { ModelSchema } from "./modelSchema"
 import { openAISendMessages } from "./openai"
+import { selectDirectory } from "./selectDirectory"
 
 export async function createModel() {
   const modelName = await input({
@@ -12,6 +13,7 @@ export async function createModel() {
   const modelPurpose = await input({
     message: `The purpose of the ${modelName} model is to:`,
   })
+  const outputDir = await selectDirectory("Store the code in:")
   const fileContent = fs.readFileSync(path.join(__dirname, "modelSchema.ts"))
   const resultContent = await openAISendMessages([
     {
@@ -42,4 +44,8 @@ export async function createModel() {
   }
   const parsedModel = ModelSchema.parse(jsonData.json)
   console.log(parsedModel)
+  fs.writeFileSync(
+    path.resolve(outputDir, modelName + "Model.json"),
+    JSON.stringify(parsedModel, null, 2)
+  )
 }
