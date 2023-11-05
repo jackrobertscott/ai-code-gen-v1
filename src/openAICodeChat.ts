@@ -1,6 +1,5 @@
 import OpenAI from "openai"
 import { ChatCompletionMessageParam } from "openai/resources"
-import { startSpinner } from "./startSpinner"
 
 const apiKey = process.argv[2]
 
@@ -14,15 +13,32 @@ export const openAI = new OpenAI({
   apiKey,
 })
 
-export async function openAISendMessages(
+export async function openAICodeChat(
+  language: string,
   messages: Array<ChatCompletionMessageParam>
 ) {
-  const stopSpinner = startSpinner()
-  const result = await openAI.chat.completions.create({
+  // const stopSpinner = startSpinner()
+  const stream = openAI.beta.chat.completions.stream({
     model: "gpt-3.5-turbo",
-    messages,
+    stream: true,
+    messages: [
+      {
+        role: "system",
+        content: [
+          "You are a helpful assistant.",
+          "You will not describe your code.",
+          "Your code will not have a description.",
+          "Your code will be written in " + language,
+        ].join(" "),
+      },
+      ...messages,
+    ],
   })
-  stopSpinner()
+  // stopSpinner()
+  stream.on("content", (delta) => {
+    process.stdout.write(delta)
+  })
+  const result = await stream.finalChatCompletion()
   if (result.usage) {
     const { prompt_tokens: pt, completion_tokens: ct } = result.usage
     console.log(`Prompt tokens: ${pt} ($${((pt / 1000) * 0.0015).toFixed(4)})`)

@@ -3,35 +3,30 @@ import fs from "fs"
 import path from "path"
 import { extractJSONCode } from "./extractCode"
 import { ModelSchema } from "./modelSchema"
-import { openAISendMessages } from "./openai"
+import { openAICodeChat } from "./openAICodeChat"
 import { selectDirectory } from "./selectDirectory"
 
 export async function createJsonModel() {
-  const modelName = await input({
+  let modelName = await input({
     message: "The model name is:",
   })
+  modelName = modelName.split(" ").join("")
   const modelPurpose = await input({
-    message: `The purpose of the ${modelName} model is to:`,
+    message: `The purpose of the model is to:`,
   })
   const outputDir = await selectDirectory({
     message: "Store the code in:",
   })
-  const resultContent = await openAISendMessages([
-    {
-      role: "system",
-      content: [
-        "You are a helpful assistant for a software development company.",
-        "You respond only with code.",
-      ].join(" "),
-    },
+  const resultContent = await openAICodeChat("JSON", [
+    { role: "user", content: "Create a zod schema for a database model." },
+    { role: "assistant", content: "What is the model's name?" },
+    { role: "user", content: modelName },
+    { role: "assistant", content: "What is the purpose of the model?" },
+    { role: "user", content: "The purpose is to: " + modelPurpose },
+    { role: "assistant", content: "What shape do you want the code to be?" },
     {
       role: "user",
       content: [
-        `Create a database model.`,
-        `The model name is: ${modelName}`,
-        `The purpose of the ${modelName} model is to: ${modelPurpose}`,
-        `Your response should be JSON code.`,
-        `The JSON code should match the following "ModelSchema" definition:`,
         "```ts",
         fs.readFileSync(path.join(__dirname, "modelSchema.ts")),
         "```",
