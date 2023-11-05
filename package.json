@@ -14,7 +14,8 @@
     "watch": "tsc --watch",
     "clean": "rm -rf dist/*",
     "prepublishOnly": "npm run clean && npm run build",
-    "dev": "ts-node-dev src/index.ts",
+    "dev": "ts-node src/index.ts",
+    "dev:watch": "ts-node-dev src/index.ts",
     "test": "jest"
   },
   "devDependencies": {

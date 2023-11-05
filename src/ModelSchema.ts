@@ -2,7 +2,7 @@ import { z } from "zod"
 
 const FieldSchema = z.object({
   name: z.string(),
-  type: z.enum(["string", "number", "boolean", "date"]),
+  type: z.enum(["string", "number", "boolean", "date", "array"]),
   required: z.boolean().optional(),
   unique: z.boolean().optional(),
   default: z.any().optional(),
