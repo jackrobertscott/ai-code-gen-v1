@@ -1,8 +1,8 @@
 import { input } from "@inquirer/prompts"
 import fs from "fs"
 import path from "path"
+import { ModelSchema } from "./ModelSchema"
 import { extractJSONCode } from "./extractCode"
-import { ModelSchema } from "./modelSchema"
 import { openAICodeChat } from "./openAICodeChat"
 import { selectDirectory } from "./selectDirectory"
 

@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "name": "shared",
+  "version": "0.0.0",
+  "author": "Jack Scott",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@types/node": "^20.6.3",
+    "typescript": "^5.2.2",
+    "zod": "^3.22.2"
+  }
+}
