@@ -6,15 +6,16 @@ import { ModelSchema } from "./modelSchema"
 import { openAISendMessages } from "./openai"
 import { selectDirectory } from "./selectDirectory"
 
-export async function createModel() {
+export async function createJsonModel() {
   const modelName = await input({
     message: "The model name is:",
   })
   const modelPurpose = await input({
     message: `The purpose of the ${modelName} model is to:`,
   })
-  const outputDir = await selectDirectory("Store the code in:")
-  const fileContent = fs.readFileSync(path.join(__dirname, "modelSchema.ts"))
+  const outputDir = await selectDirectory({
+    message: "Store the code in:",
+  })
   const resultContent = await openAISendMessages([
     {
       role: "system",
@@ -32,7 +33,7 @@ export async function createModel() {
         `Your response should be JSON code.`,
         `The JSON code should match the following "ModelSchema" definition:`,
         "```ts",
-        fileContent,
+        fs.readFileSync(path.join(__dirname, "modelSchema.ts")),
         "```",
       ].join("\n"),
     },

@@ -1,8 +1,10 @@
 import { select } from "@inquirer/prompts"
-import { createModel } from "./createModel"
+import { createJsonModel } from "./createJsonModel"
+import { createZodModel } from "./createZodModel"
 
 enum SelectChoice {
-  CreateModel,
+  CreateZodModel,
+  CreateJsonModel,
 }
 
 async function main() {
@@ -10,15 +12,22 @@ async function main() {
     message: "I want to:",
     choices: [
       {
-        value: SelectChoice.CreateModel,
-        name: "Create a database model",
+        value: SelectChoice.CreateZodModel,
+        name: "Create zod model",
+      },
+      {
+        value: SelectChoice.CreateJsonModel,
+        name: "Create json model",
       },
     ],
   })
   switch (action) {
-    case SelectChoice.CreateModel: {
-      await createModel()
-    }
+    case SelectChoice.CreateZodModel:
+      await createZodModel()
+      break
+    case SelectChoice.CreateJsonModel:
+      await createJsonModel()
+      break
   }
 }
 

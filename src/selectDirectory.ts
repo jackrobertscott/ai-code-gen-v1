@@ -3,14 +3,14 @@ import fs from "fs"
 import path from "path"
 
 export async function selectDirectory(
-  message: string,
+  options: { message: string },
   curDir: string = process.cwd()
 ) {
   const dirs = fs
     .readdirSync(curDir)
     .filter((dir) => fs.statSync(dir).isDirectory)
   const folder = await select({
-    message,
+    ...options,
     choices: dirs.map((dir) => ({
       value: path.relative(curDir, dir),
     })),

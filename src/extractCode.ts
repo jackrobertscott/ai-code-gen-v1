@@ -1,11 +1,20 @@
+export function extractCode(markdown: string): string[] {
+  const blocks: string[] = []
+  const regex = /```(?:\w+\n)?([^`]+)```/g
+  let match
+  while ((match = regex.exec(markdown))) {
+    blocks.push(match[1].trim())
+  }
+  return blocks
+}
+
 export function extractJSONCode(
-  text: string
+  markdown: string
 ): { json: string } | { error: string } {
-  const jsonBlockRegex = /```json\s*([\s\S]*?)\s*```/
-  const match = text.match(jsonBlockRegex)
-  if (match && match[1]) {
+  const blocks = extractCode(markdown)
+  if (blocks[0]) {
     try {
-      return { json: JSON.parse(match[1]) }
+      return { json: JSON.parse(blocks[0]) }
     } catch (error) {
       const msg =
         typeof error === "string"
