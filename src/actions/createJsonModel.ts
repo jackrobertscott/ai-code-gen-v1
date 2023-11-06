@@ -1,10 +1,10 @@
 import { input } from "@inquirer/prompts"
 import fs from "fs"
 import path from "path"
-import { ModelSchema } from "./ModelSchema"
-import { extractJSONCode } from "./extractCode"
-import { openAICodeChat } from "./openAICodeChat"
-import { selectDirectory } from "./selectDirectory"
+import { ModelSchema } from "../schemas/ModelSchema"
+import { extractJSONCode } from "../utils/extractCode"
+import { openAICodeChat } from "../utils/openAICodeChat"
+import { selectDirectory } from "../utils/selectDirectory"
 
 export async function createJsonModel() {
   let modelName = await input({
@@ -28,7 +28,7 @@ export async function createJsonModel() {
       role: "user",
       content: [
         "```ts",
-        fs.readFileSync(path.join(__dirname, "modelSchema.ts")),
+        fs.readFileSync(path.join(__dirname, "../schemas/ModelSchema.ts")),
         "```",
       ].join("\n"),
     },

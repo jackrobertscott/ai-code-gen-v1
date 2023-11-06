@@ -1,17 +1,5 @@
-import OpenAI from "openai"
 import { ChatCompletionMessageParam } from "openai/resources"
-
-const apiKey = process.argv[2]
-
-if (!apiKey?.length)
-  throw new Error("Please your OpenAI api key as the first command argument.")
-
-if (!apiKey.startsWith("sk-"))
-  throw new Error('Your OpenAI api key must start with "sk-".')
-
-export const openAI = new OpenAI({
-  apiKey,
-})
+import { openAI } from "./openAI"
 
 export async function openAICodeChat(
   language: string,

@@ -1,9 +1,9 @@
 import { input } from "@inquirer/prompts"
 import fs from "fs"
 import path from "path"
-import { extractCode } from "./extractCode"
-import { openAICodeChat } from "./openAICodeChat"
-import { selectDirectory } from "./selectDirectory"
+import { extractCode } from "../utils/extractCode"
+import { openAICodeChat } from "../utils/openAICodeChat"
+import { selectDirectory } from "../utils/selectDirectory"
 
 export async function createZodModel() {
   const modelName = await input({

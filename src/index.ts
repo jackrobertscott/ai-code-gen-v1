@@ -1,7 +1,7 @@
 import { select } from "@inquirer/prompts"
-import { createJsonModel } from "./createJsonModel"
-import { createZodModel } from "./createZodModel"
-import { updateZodModel } from "./updateZodModel"
+import { createJsonModel } from "./actions/createJsonModel"
+import { createZodModel } from "./actions/createZodModel"
+import { updateZodModel } from "./actions/updateZodModel"
 
 enum SelectChoice {
   CreateZodModel,
