@@ -11,11 +11,10 @@
   ],
   "scripts": {
     "build": "tsc",
-    "watch": "tsc --watch",
     "clean": "rm -rf dist/*",
     "prepublishOnly": "npm run clean && npm run build",
     "dev": "ts-node src/index.ts",
-    "dev:watch": "ts-node-dev src/index.ts",
+    "watch": "ts-node-dev src/index.ts",
     "test": "jest"
   },
   "devDependencies": {
@@ -27,6 +26,7 @@
   },
   "dependencies": {
     "@inquirer/prompts": "^3.2.0",
+    "escape-codes": "^0.3.1",
     "openai": "^4.15.3",
     "zod": "^3.22.4"
   }
