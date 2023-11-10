@@ -1,43 +1,37 @@
-import { select } from "@inquirer/prompts"
-import { createJsonModel } from "./actions/createJsonModel"
-import { createZodModel } from "./actions/createZodModel"
-import { updateZodModel } from "./actions/updateZodModel"
+import { input } from "@inquirer/prompts"
+import { openAI } from "./utils/openAI"
 
-enum SelectChoice {
-  CreateZodModel,
-  UpdateZodModel,
-  CreateJsonModel,
+async function getNickname(args: { name: string }) {
+  // writeFileSync(
+  //   path.resolve(__dirname, "hello.json"),
+  //   JSON.stringify({ hello: args.name }, null, 2)
+  // )
+  return { nickname: args.name.split("").reverse().join("") }
 }
 
 async function main() {
-  const action = await select({
-    message: "I want to:",
-    choices: [
+  const q = await input({ message: "What do you want?" })
+  const runner = openAI.beta.chat.completions.runFunctions({
+    model: "gpt-3.5-turbo",
+    messages: [{ role: "user", content: q }],
+    functions: [
       {
-        value: SelectChoice.CreateZodModel,
-        name: "Create zod model",
-      },
-      {
-        value: SelectChoice.UpdateZodModel,
-        name: "Update zod model",
-      },
-      {
-        value: SelectChoice.CreateJsonModel,
-        name: "Create json model",
+        description: "Gets the nickname of the user.",
+        function: getNickname,
+        parse: (data) => {
+          console.log("parse:", typeof data)
+          return JSON.parse(data)
+        },
+        parameters: {
+          type: "object",
+          properties: { name: { type: "string" } },
+        },
       },
     ],
   })
-  switch (action) {
-    case SelectChoice.CreateZodModel:
-      await createZodModel()
-      break
-    case SelectChoice.UpdateZodModel:
-      await updateZodModel()
-      break
-    case SelectChoice.CreateJsonModel:
-      await createJsonModel()
-      break
-  }
+  runner.on("message", (message) => console.log(message))
+  const final = await runner.finalContent()
+  console.log(final)
 }
 
 main()
